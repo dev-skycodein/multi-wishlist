@@ -1,0 +1,476 @@
+.cmw-wishlist-display {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cmw-wishlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+}
+
+.cmw-wishlist-title {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cmw-wishlist-name {
+    cursor: pointer;
+}
+
+.cmw-edit-name-btn,
+.cmw-delete-wishlist-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.cmw-edit-name-btn:hover,
+.cmw-delete-wishlist-btn:hover {
+    background-color: #e9ecef;
+}
+
+.cmw-delete-wishlist-btn {
+    color: #dc3545;
+}
+
+.cmw-wishlist-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.cmw-wishlist-products {
+    padding: 20px;
+}
+
+.cmw-wishlist-product {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cmw-wishlist-product:last-child {
+    border-bottom: none;
+}
+
+.cmw-product-image img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.cmw-product-details {
+    flex: 1;
+}
+
+.cmw-product-title {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+.cmw-product-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.cmw-product-title a:hover {
+    color: #007cba;
+}
+
+.cmw-product-price {
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.cmw-product-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cmw-add-to-cart-btn,
+.cmw-remove-from-wishlist-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.cmw-add-to-cart-btn {
+    background-color: #007cba;
+    color: white;
+}
+
+.cmw-add-to-cart-btn:hover {
+    background-color: #005a87;
+}
+
+.cmw-add-to-cart-btn.added {
+    background-color: #28a745;
+}
+
+.cmw-remove-from-wishlist-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.cmw-remove-from-wishlist-btn:hover {
+    background-color: #c82333;
+}
+
+.cmw-move-to-wishlist {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+/* Wishlist Selector Styles */
+.cmw-wishlist-selector {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+.cmw-selector-header h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+}
+
+.cmw-wishlist-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cmw-wishlist-btn {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+.cmw-wishlist-btn:hover {
+    background-color: #e9ecef;
+}
+
+.cmw-wishlist-btn.cmw-in-wishlist {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.cmw-wishlist-btn.cmw-in-wishlist:hover {
+    background-color: #218838;
+}
+
+.cmw-create-wishlist {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.cmw-new-wishlist-name {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.cmw-create-wishlist-btn {
+    padding: 8px 16px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cmw-create-wishlist-btn:hover {
+    background-color: #5a6268;
+}
+
+.cmw-create-wishlist-btn:disabled {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cmw-wishlist-product {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .cmw-product-actions {
+        flex-direction: column;
+    }
+    
+    .cmw-create-wishlist {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+.cmw-wishlist-display {
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cmw-wishlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.cmw-wishlist-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cmw-wishlist-name {
+  cursor: pointer;
+}
+
+.cmw-edit-name-btn,
+.cmw-delete-wishlist-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.cmw-edit-name-btn:hover,
+.cmw-delete-wishlist-btn:hover {
+  background-color: #e9ecef;
+}
+
+.cmw-delete-wishlist-btn {
+  color: #dc3545;
+}
+
+.cmw-wishlist-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.cmw-wishlist-products {
+  padding: 20px;
+}
+
+.cmw-wishlist-product {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cmw-wishlist-product:last-child {
+  border-bottom: none;
+}
+
+.cmw-product-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.cmw-product-details {
+  flex: 1;
+}
+
+.cmw-product-title {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.cmw-product-title a {
+  color: #333;
+  text-decoration: none;
+}
+
+.cmw-product-title a:hover {
+  color: #007cba;
+}
+
+.cmw-product-price {
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.cmw-product-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cmw-add-to-cart-btn,
+.cmw-remove-from-wishlist-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.cmw-add-to-cart-btn {
+  background-color: #007cba;
+  color: white;
+}
+
+.cmw-add-to-cart-btn:hover {
+  background-color: #005a87;
+}
+
+.cmw-add-to-cart-btn.added {
+  background-color: #28a745;
+}
+
+.cmw-remove-from-wishlist-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cmw-remove-from-wishlist-btn:hover {
+  background-color: #c82333;
+}
+
+.cmw-move-to-wishlist {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Wishlist Selector Styles */
+.cmw-wishlist-selector {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.cmw-selector-header h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.cmw-wishlist-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cmw-wishlist-btn {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.cmw-wishlist-btn:hover {
+  background-color: #e9ecef;
+}
+
+.cmw-wishlist-btn.cmw-in-wishlist {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.cmw-wishlist-btn.cmw-in-wishlist:hover {
+  background-color: #218838;
+}
+
+.cmw-create-wishlist {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+}
+
+.cmw-new-wishlist-name {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.cmw-create-wishlist-btn {
+  padding: 8px 16px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cmw-create-wishlist-btn:hover {
+  background-color: #5a6268;
+}
+
+.cmw-create-wishlist-btn:disabled {
+  background-color: #adb5bd;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cmw-wishlist-product {
+      flex-direction: column;
+      gap: 15px;
+  }
+  
+  .cmw-product-actions {
+      flex-direction: column;
+  }
+  
+  .cmw-create-wishlist {
+      flex-direction: column;
+      align-items: stretch;
+  }
+}

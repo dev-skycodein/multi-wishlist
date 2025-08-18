@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
                 alert('An error occurred');
             },
             complete: function() {
-                $btn.prop('disabled', false).text('Create New Wishlist');
+                $btn.prop('disabled', false).text('Create & Add');
             }
         });
     });
@@ -271,4 +271,175 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+    // Create new wishlist from all wishlists page
+    $(document).on('click', '.cmw-create-new-wishlist-btn', function(e) {
+        e.preventDefault();
+        $('.cmw-create-wishlist-modal').show();
+    });
+
+    // Close modal
+    $(document).on('click', '.cmw-cancel-btn', function(e) {
+        e.preventDefault();
+        $('.cmw-create-wishlist-modal').hide();
+        $('.cmw-new-wishlist-name').val('');
+    });
+
+    // Create wishlist from modal
+    $(document).on('click', '.cmw-create-btn', function(e) {
+        e.preventDefault();
+        
+        var $btn = $(this);
+        var $input = $('.cmw-new-wishlist-name');
+        var name = $input.val().trim();
+        
+        if (!name) {
+            alert('Please enter a wishlist name');
+            return;
+        }
+        
+        $btn.prop('disabled', true).text('Creating...');
+        
+        $.ajax({
+            url: cmw_ajax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'cmw_create_wishlist',
+                nonce: cmw_ajax.nonce,
+                name: name
+            },
+            success: function(response) {
+                if (response.success) {
+                    $input.val('');
+                    $('.cmw-create-wishlist-modal').hide();
+                    location.reload(); // Refresh to show new wishlist
+                } else {
+                    alert('Error: ' + response.data);
+                }
+            },
+            error: function() {
+                alert('An error occurred');
+            },
+            complete: function() {
+                $btn.prop('disabled', false).text('Create Wishlist');
+            }
+        });
+    });
+
+    // Enhanced add to wishlist functionality
+    $(document).on('click', '.cmw-add-to-wishlist-btn', function(e) {
+        e.preventDefault();
+        
+        var $btn = $(this);
+        var wishlistId = $btn.data('wishlist-id');
+        var productId = $btn.data('product-id');
+        
+        $btn.prop('disabled', true).text('Adding...');
+        
+        $.ajax({
+            url: cmw_ajax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'cmw_add_to_wishlist',
+                nonce: cmw_ajax.nonce,
+                wishlist_id: wishlistId,
+                product_id: productId
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update the button to show it's been added
+                    $btn.text('Added!').addClass('added').prop('disabled', true);
+                    
+                    // Update the current wishlists display
+                    updateWishlistStatus(productId, wishlistId, 'add');
+                    
+                    // Move button to current wishlists section
+                    setTimeout(function() {
+                        location.reload(); // Refresh to update display
+                    }, 1000);
+                } else {
+                    alert('Error: ' + response.data);
+                }
+            },
+            error: function() {
+                alert('An error occurred');
+            },
+            complete: function() {
+                $btn.prop('disabled', false);
+            }
+        });
+    });
+
+    // Create and add to new wishlist
+    $(document).on('click', '.cmw-create-wishlist-btn', function(e) {
+        e.preventDefault();
+        
+        var $btn = $(this);
+        var $input = $btn.siblings('.cmw-new-wishlist-name');
+        var name = $input.val().trim();
+        var productId = $btn.closest('.cmw-enhanced-wishlist-selector').data('product-id');
+        
+        if (!name) {
+            alert('Please enter a wishlist name');
+            return;
+        }
+        
+        $btn.prop('disabled', true).text('Creating...');
+        
+        $.ajax({
+            url: cmw_ajax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'cmw_create_wishlist',
+                nonce: cmw_ajax.nonce,
+                name: name
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Now add the product to the new wishlist
+                    addProductToWishlist(productId, response.data.wishlist_id, $btn);
+                } else {
+                    alert('Error: ' + response.data);
+                }
+            },
+            error: function() {
+                alert('An error occurred');
+            },
+            complete: function() {
+                $btn.prop('disabled', false).text('Create & Add');
+            }
+        });
+    });
+
+    function addProductToWishlist(productId, wishlistId, $btn) {
+        $.ajax({
+            url: cmw_ajax.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'cmw_add_to_wishlist',
+                nonce: cmw_ajax.nonce,
+                wishlist_id: wishlistId,
+                product_id: productId
+            },
+            success: function(response) {
+                if (response.success) {
+                    $btn.text('Success!').addClass('added');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    alert('Error adding product to new wishlist: ' + response.data);
+                }
+            },
+            error: function() {
+                alert('An error occurred while adding to wishlist');
+            }
+        });
+    }
+
+    function updateWishlistStatus(productId, wishlistId, action) {
+        // This function updates the UI to reflect changes
+        // Implementation depends on your specific UI structure
+        console.log('Wishlist status updated:', action, 'product', productId, 'to wishlist', wishlistId);
+    }
 });

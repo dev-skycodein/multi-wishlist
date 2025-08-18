@@ -127,6 +127,8 @@ foreach ($users as $user) {
         <ul>
             <li><code>[custom_multi_wishlist wishlist_id="default" show_actions="true"]</code> - Display a specific wishlist</li>
             <li><code>[custom_wishlist_selector product_id="123" show_create="true"]</code> - Show wishlist selector for a product</li>
+            <li><code>[custom_all_wishlists]</code> - Display all user wishlists overview</li>
+            <li><code>[custom_enhanced_wishlist_selector product_id="123"]</code> - Enhanced wishlist management for products</li>
         </ul>
         
         <h3>PHP Functions</h3>
@@ -134,6 +136,13 @@ foreach ($users as $user) {
             <li><code>custom_multi_wishlist()->create_wishlist($name, $user_id)</code> - Create a new wishlist</li>
             <li><code>custom_multi_wishlist()->add_to_wishlist($product_id, $wishlist_id, $user_id)</code> - Add product to wishlist</li>
             <li><code>custom_multi_wishlist()->get_user_wishlists()</code> - Get all user wishlists</li>
+        </ul>
+        
+        <h3>Page Setup</h3>
+        <ul>
+            <li><strong>All Wishlists Page:</strong> Create a page with slug "all-wishlists" and use <code>[custom_all_wishlists]</code> shortcode</li>
+            <li><strong>Individual Wishlist Pages:</strong> URLs like <code>/wishlist/{wishlist-id}</code> will automatically work</li>
+            <li><strong>Product Pages:</strong> Use <code>[custom_enhanced_wishlist_selector]</code> for full wishlist management</li>
         </ul>
     </div>
 </div>

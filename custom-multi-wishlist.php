@@ -18,12 +18,12 @@ if (!defined('ABSPATH')) {
 }
 
 // Check if Jet Compare Wishlist is active
-if (!class_exists('Jet_CW')) {
-    add_action('admin_notices', function() {
-        echo '<div class="notice notice-error"><p>Custom Multi Wishlist requires Jet Compare Wishlist plugin to be installed and activated.</p></div>';
-    });
-    return;
-}
+// if (!class_exists('Jet_CW')) {
+//     add_action('admin_notices', function() {
+//         echo '<div class="notice notice-error"><p>Custom Multi Wishlist requires Jet Compare Wishlist plugin to be installed and activated.</p></div>';
+//     });
+//     return;
+// }
 
 class Custom_Multi_Wishlist {
     
@@ -56,12 +56,21 @@ class Custom_Multi_Wishlist {
         // Add shortcodes
         add_shortcode('custom_multi_wishlist', [$this, 'wishlist_shortcode']);
         add_shortcode('custom_wishlist_selector', [$this, 'wishlist_selector_shortcode']);
+        add_shortcode('custom_all_wishlists', [$this, 'all_wishlists_shortcode']);
+        add_shortcode('custom_enhanced_wishlist_selector', [$this, 'enhanced_wishlist_selector_shortcode']);
         
         // Enqueue scripts and styles
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         
         // Add admin menu
         add_action('admin_menu', [$this, 'add_admin_menu']);
+
+        // Add rewrite rules and query vars
+        add_action('init', [$this, 'add_rewrite_rules']);
+        add_filter('query_vars', [$this, 'add_query_vars']);
+
+        // Handle individual wishlist pages
+        add_action('template_redirect', [$this, 'handle_wishlist_pages']);
     }
     
     public function init() {
@@ -373,6 +382,7 @@ class Custom_Multi_Wishlist {
             return '<p>Wishlist not found.</p>';
         }
         
+        $cmw = custom_multi_wishlist();
         ob_start();
         include plugin_dir_path(__FILE__) . 'templates/wishlist-display.php';
         return ob_get_clean();
@@ -391,8 +401,42 @@ class Custom_Multi_Wishlist {
             'show_create' => 'true'
         ], $atts);
         
+        $cmw = custom_multi_wishlist();
         ob_start();
         include plugin_dir_path(__FILE__) . 'templates/wishlist-selector.php';
+        return ob_get_clean();
+    }
+    
+    /**
+     * All wishlists shortcode
+     */
+    public function all_wishlists_shortcode($atts) {
+        if (!is_user_logged_in()) {
+            return '<p>Please log in to view your wishlists.</p>';
+        }
+        
+        $cmw = custom_multi_wishlist();
+        ob_start();
+        include plugin_dir_path(__FILE__) . 'templates/all-wishlists-display.php';
+        return ob_get_clean();
+    }
+    
+    /**
+     * Enhanced wishlist selector shortcode
+     */
+    public function enhanced_wishlist_selector_shortcode($atts) {
+        if (!is_user_logged_in()) {
+            return '';
+        }
+        
+        $atts = shortcode_atts([
+            'product_id' => '',
+            'show_create' => 'true'
+        ], $atts);
+        
+        $cmw = custom_multi_wishlist();
+        ob_start();
+        include plugin_dir_path(__FILE__) . 'templates/enhanced-wishlist-selector.php';
         return ob_get_clean();
     }
     
@@ -443,6 +487,73 @@ class Custom_Multi_Wishlist {
     public function admin_page() {
         include plugin_dir_path(__FILE__) . 'admin/admin-page.php';
     }
+    
+    /**
+     * Add rewrite rules for wishlist pages
+     */
+    public function add_rewrite_rules() {
+        add_rewrite_tag( '%wishlist_id%', '([^&]+)' );
+
+        // Map /wishlist/{id} to the existing 'wishlist' page, passing wishlist_id
+        add_rewrite_rule(
+            '^wishlist/([^/]+)/?$',
+            'index.php?pagename=wishlist&wishlist_id=$matches[1]',
+            'top'
+        );
+
+        // Map /all-wishlists to a page with slug 'all-wishlists'
+        add_rewrite_rule(
+            '^all-wishlists/?$',
+            'index.php?pagename=all-wishlists',
+            'top'
+        );
+    }
+    
+    /**
+     * Add query vars
+     */
+    public function add_query_vars($vars) {
+        $vars[] = 'wishlist_id';
+        return $vars;
+    }
+    
+    /**
+     * Handle individual wishlist pages
+     */
+    public function handle_wishlist_pages() {
+        $wishlist_id = get_query_var( 'wishlist_id' );
+        if ( $wishlist_id ) {
+            $this->display_individual_wishlist( $wishlist_id );
+            exit;
+        }
+    }
+    
+    /**
+     * Display individual wishlist page
+     */
+    private function display_individual_wishlist($wishlist_id) {
+        $wishlist = $this->get_wishlist($wishlist_id);
+        
+        if (!$wishlist) {
+            wp_die('Wishlist not found');
+        }
+        
+        // Set page title
+        add_filter('wp_title', function($title) use ($wishlist) {
+            return $wishlist['name'] . ' - ' . get_bloginfo('name');
+        });
+        
+        // Include header
+        get_header();
+        
+        // Display wishlist content
+        echo '<div class="cmw-individual-wishlist-page">';
+        echo do_shortcode('[custom_multi_wishlist wishlist_id="' . $wishlist_id . '" show_actions="true"]');
+        echo '</div>';
+        
+        // Include footer
+        get_footer();
+    }
 }
 
 // Initialize the plugin
@@ -452,3 +563,10 @@ Custom_Multi_Wishlist::get_instance();
 function custom_multi_wishlist() {
     return Custom_Multi_Wishlist::get_instance();
 }
+
+// Flush rewrite rules on activation
+register_activation_hook(__FILE__, function() {
+    $plugin = Custom_Multi_Wishlist::get_instance();
+    $plugin->add_rewrite_rules();
+    flush_rewrite_rules();
+});

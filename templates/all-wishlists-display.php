@@ -31,28 +31,10 @@ $user_wishlists = $cmw->get_user_wishlists();
                         <span class="cmw-created-date">Created: <?php echo date('M j, Y', strtotime($wishlist['created'])); ?></span>
                     </div>
                     
-                    <?php if (!empty($wishlist['products'])): ?>
-                        <div class="cmw-wishlist-preview">
-                            <?php 
-                            $preview_products = array_slice($wishlist['products'], 0, 3);
-                            foreach ($preview_products as $product_id):
-                                $product = wc_get_product($product_id);
-                                if (!$product) continue;
-                            ?>
-                                <div class="cmw-preview-product">
-                                    <a href="<?php echo esc_url($product->get_permalink()); ?>">
-                                        <?php echo $product->get_image('thumbnail'); ?>
-                                    </a>
-                                </div>
-                            <?php endforeach; ?>
-                            <?php if (count($wishlist['products']) > 3): ?>
-                                <div class="cmw-more-products">+<?php echo count($wishlist['products']) - 3; ?> more</div>
-                            <?php endif; ?>
-                        </div>
-                    <?php else: ?>
+                    <?php if (empty($wishlist['products'])): ?>
                         <div class="cmw-empty-wishlist">
                             <p>No products yet</p>
-                        </div>
+                        </div>                        
                     <?php endif; ?>
                 </div>
                 
@@ -63,10 +45,10 @@ $user_wishlists = $cmw->get_user_wishlists();
                     
                     <?php if (!$wishlist['is_default']): ?>
                         <button class="cmw-edit-wishlist-btn" data-wishlist-id="<?php echo esc_attr($wishlist['id']); ?>">
-                            Edit
+                            <span class="dashicons dashicons-edit"></span>
                         </button>
                         <button class="cmw-delete-wishlist-btn" data-wishlist-id="<?php echo esc_attr($wishlist['id']); ?>">
-                            Delete
+                            <span class="dashicons dashicons-trash"></span>
                         </button>
                     <?php endif; ?>
                 </div>
